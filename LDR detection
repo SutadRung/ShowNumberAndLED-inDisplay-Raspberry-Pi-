@@ -1,0 +1,59 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+LIGHT_PIN = 7
+GPIO.setup(LIGHT_PIN, GPIO.IN)
+
+LEDRED = 16
+GPIO.setup(LEDRED,GPIO.OUT)
+GPIO.setup(18,GPIO.OUT)
+from signal import signal, SIGTERM, SIGHUP, pause
+from rpi_lcd import LCD
+lcd = LCD()
+print("starting up the LIGHT Module(click on STOP to exit)")
+time.sleep(0.5)
+
+def Ninght1():
+    GPIO.output(LEDRED ,1)
+    lcd.text("Ninght Time", 1)
+    lcd.text("Good ninght ", 2)
+
+
+
+def DayTime1():
+    GPIO.output(LEDRED ,0)
+    lcd.text("Day Time", 1)
+    lcd.text("Morning  ", 2)
+    for i in range(1,5):
+        GPIO.output(LEDRED,0)
+        GPIO.output(18,GPIO.LOW)
+        time.sleep(0.5)
+        GPIO.output(LEDRED,1)
+        GPIO.output(18,GPIO.HIGH)
+        time.sleep(0.5)
+    GPIO.output(18,GPIO.LOW)
+    GPIO.output(LEDRED,0)
+    
+
+
+    
+while True:
+
+    
+    print(GPIO.input(LIGHT_PIN))
+    if (GPIO.input(LIGHT_PIN) == 1):
+        print("Ninght")
+        Ninght1()
+        
+    elif (GPIO.input(LIGHT_PIN) == 0):
+        print("Day time")
+        DayTime1()
+
+    time.sleep(0.5)
+
+   
+
+
+GPIO.cleanup()
